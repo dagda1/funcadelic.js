@@ -1,44 +1,27 @@
-const babel = require("rollup-plugin-babel");
-const filesize = require("rollup-plugin-filesize");
-const pkg = require("./package.json");
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import pkg from "./package.json";
+import typescript from "rollup-plugin-typescript2";
 
-const globals = {
-  "lodash.curry": "_.curry",
-  "object.getownpropertydescriptors": "Object.getOwnPropertyDescriptors"
-};
-
-let external = Object.keys(globals);
-
-module.exports = {
-  input: "src/funcadelic.js",
-  external,  
-  output: [
-    {
+export default [
+  {
+    input: "src/funcadelic.ts",
+    output: {
       name: "funcadelic",
       file: pkg.browser,
-      globals,
       format: "umd"
     },
-    { file: pkg.main, format: "cjs" },
-    { file: pkg.module, format: "es" }
-  ],
-  plugins: [
-    babel({
-      babelrc: false,
-      comments: false,
-      presets: [
-        [
-          "@babel/preset-env",
-          {
-            modules: false
-          }
-        ]
-      ]
-    }),
-    filesize({
-      render(opt, size, gzip, bundle) {
-        return `Built: ${bundle.file} ( size: ${size}, gzip: ${gzip})`;
-      }
-    })
-  ]
-};
+    plugins: [resolve(), commonjs(), typescript()]
+  },
+
+  {
+    input: "src/funcadelic.ts",
+    external: id =>
+      /lodash/.test(id) || /object.getownpropertydescriptors/.test(id),
+    output: [
+      { file: pkg.main, format: "cjs" },
+      { file: pkg.module, format: "es" }
+    ],
+    plugins: [typescript()]
+  }
+];

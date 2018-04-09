@@ -25,11 +25,13 @@
   ],
   "dependencies": {
     "lodash.curry": "4.1.1",
-    "object.getownpropertydescriptors": "2.0.3"
+    "object.getownpropertydescriptors": "2.0.3",
+    "ts-jest": "^22.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.44",
     "@babel/preset-env": "^7.0.0-beta.44",
+    "@types/jest": "^22.2.2",
     "babel-core": "^7.0.0-0",
     "babel-jest": "22.4.3",
     "benchmark": "2.1.4",
@@ -37,20 +39,24 @@
     "colors": "1.2.1",
     "eslint": "4.19.1",
     "eslint-plugin-prefer-let": "1.0.1",
-    "jest": "22.4.3",
+    "jest": "^22.4.3",
     "ora": "2.0.0",
     "regenerator-runtime": "0.11.1",
+    "request": "^2.85.0",
     "rollup": "0.57.1",
     "rollup-plugin-babel": "4.0.0-beta.3",
-    "rollup-plugin-filesize": "1.5.0"
+    "rollup-plugin-filesize": "1.5.0",
+    "rollup-plugin-typescript2": "github:ezolenko/rollup-plugin-typescript2#master",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
   },
   "jest": {
-    "testRegex": "(/tests/.*|\\.(test|spec))\\.(js)$",
-    "moduleFileExtensions": [
-      "js",
-      "json"
+    "testMatch": [
+      "<rootDir>/src/**/?(*.)(spec|test).ts?(x)"
     ],
-    "globalSetup": "./scripts/build.js",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
     "modulePaths": [
       "<rootDir>/src",
       "<rootDir>/node_modules"
@@ -58,8 +64,13 @@
     "watchPathIgnorePatterns": [
       "<rootDir>/dist/"
     ],
-    "moduleNameMapper": {
-      "funcadelic": "<rootDir>/dist/funcadelic.umd.js"
-    }
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
