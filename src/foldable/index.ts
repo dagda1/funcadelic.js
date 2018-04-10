@@ -1,4 +1,8 @@
-import { type } from './typeclasses';
+export interface Foldable<T> {
+  reduce<U>(fn: (u: U, t: T) => U, u: U): U;
+}
+
+/* import { type } from './typeclasses';
 
 export const Foldable = type(class Foldable {
   foldr(fn, initial, foldable) {
@@ -18,3 +22,4 @@ export const Foldable = type(class Foldable {
 });
 
 export const { foldr, foldl, size } = Foldable.prototype;
+ */

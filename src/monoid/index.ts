@@ -1,5 +1,10 @@
-import { Semigroup, append } from './semigroup';
-import { foldl } from './foldable';
+import { Semigroup } from "../semigroup";
+
+export interface Monoid<T> extends Semigroup<T> {
+  empty: T;
+}
+
+/* import { foldl } from './foldable';
 import { map } from './functor';
 import { type } from './typeclasses';
 
@@ -31,4 +36,6 @@ Monoid.create = function create(Definition) {
   return Monoidal;
 };
 
-export const { reduce } = Monoid.prototype;
+export const { reduce } = Monoid.prototype; 
+
+*/
