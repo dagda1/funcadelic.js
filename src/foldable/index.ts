@@ -1,6 +1,11 @@
+import { Monoid } from "../Monoid";
 export interface Foldable<T> {
   reduce<U>(fn: (u: U, t: T) => U, u: U): U;
 }
+
+export const fold = <F, M>(F: Foldable<F>, M: Monoid<M>) => (f: F): M => {
+  return f => F.reduce(f, M.empty);
+};
 
 /* import { type } from './typeclasses';
 
