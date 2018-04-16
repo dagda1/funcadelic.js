@@ -13,7 +13,7 @@ describe("Type", () => {
   let Semigroup;
 
   beforeEach(() => {
-    Semigroup = new Type<Semigroup<{}>>(appendMaker);
+    Semigroup = new Type<Semigroup<any>>(getObjectSemigroup(), appendMaker);
 
     Semigroup.instance(Array, getArraySemigroup());
     Semigroup.instance(Object, getObjectSemigroup());

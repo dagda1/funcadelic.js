@@ -1,9 +1,9 @@
 export class Type<T> {
-  maker: Function;
+  maker: <K extends keyof T>(...args) => T[K];
   klass: T;
   implementations: { type: { new (...args: any[]): T }; implementation }[] = [];
 
-  constructor(klass: T, maker: Function) {
+  constructor(klass: T, maker: <K extends keyof T>(...args) => T[K]) {
     this.klass = klass;
     this.maker = maker;
   }
