@@ -3,8 +3,9 @@ import { append } from "../semigroup";
 
 describe("Foldable", function() {
   it("folds arrays", function() {
-    /* expect(foldr((sum, i) => sum + i, 0, [1, 2, 3, 4])).toBe(10);
-    expect(foldl((sum, i) => sum + i, 0, [1, 2, 3, 4])).toBe(10); */
+    /* expect(foldr((sum, i) => sum + i, 0, [1, 2, 3, 4])).toBe(10); */
+    const a = foldl([1, 2, 3, 4], (sum, i) => sum + i);
+    expect(a).toBe(10);
   });
   /*   it("folds objects", function() {
     expect(

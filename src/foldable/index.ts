@@ -1,11 +1,55 @@
 import { Monoid } from "../Monoid";
-export interface Foldable<T> {
-  reduce<U>(fn: (u: U, t: T) => U, u: U): U;
+import { Data, HKT } from "../types";
+import { append } from "../semigroup";
+
+export const LeftElement = "Array";
+
+export type LeftElement = typeof LeftElement;
+
+declare global {
+  interface Array<T> {
+    _LeftElement: LeftElement;
+    _RightElement: T;
+  }
 }
 
-export const fold = <F, M>(F: Foldable<F>, M: Monoid<M>) => (f: F): M => {
-  return f => F.reduce(f, M.empty);
+const reduce = <A, B>(fa: Array<A>, b: B, f: (b: B, a: A) => B): B => {
+  const l = fa.length;
+  let r = b;
+  for (let i = 0; i < l; i++) {
+    r = f(r, fa[i]);
+  }
+  return r;
 };
+
+export interface Foldable<F> {
+  readonly LeftElement: F;
+  reduce: <A, B>(fa: HKT<F, A>, b: B, f: (b: B, a: A) => B) => B;
+}
+
+export const foldlMaker = <F, M>(
+  F: Foldable<F>,
+  M: Monoid<M>
+): (<A>(fa: HKT<F, A>, f: (a: A) => M) => M) => {
+  return (fa, f) => {
+    return F.reduce(fa, M.empty, (acc, x) => {
+      return M.append(acc, f(x));
+    });
+  };
+};
+
+const monoid: Monoid<any> = {
+  append,
+  //neutral element
+  empty: () => [] //what do we do here?
+};
+
+const Arr = {
+  LeftElement,
+  reduce
+};
+
+export const foldl = foldlMaker(Arr, monoid);
 
 /* import { type } from './typeclasses';
 
