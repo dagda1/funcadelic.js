@@ -4,7 +4,7 @@ export const getType = (value: any): string =>
     .replace(/^\[object |\]$/g, "")
     .toLowerCase();
 
-export class Type<T> {
+export class Typeclass<T> {
   selectors: object;
   implementations: { type: Function; implementation: T }[] = [];
 
@@ -12,7 +12,7 @@ export class Type<T> {
     this.selectors = selectors;
   }
 
-  instance<J extends T>(type: { new (...args: any[]): T }, implementation: J) {
+  instance<J extends T>(type: Function, implementation: J) {
     this.implementations.push({
       type,
       implementation

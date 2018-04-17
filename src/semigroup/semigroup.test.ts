@@ -20,7 +20,7 @@ describe("Semigroup", () => {
     three?: number;
   }
 
-  it("maintains prototype", () => {
+  it.skip("maintains prototype", () => {
     class OneAndTwo implements T {
       one: number;
       two: number;

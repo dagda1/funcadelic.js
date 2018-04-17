@@ -1,14 +1,8 @@
-import propertiesOf from "object.getownpropertydescriptors";
-import { Data } from "../types";
-
-const { assign, getPrototypeOf, getOwnPropertySymbols, keys } = Object;
+import { Typeclass } from "../typeclass/index";
 
 export interface Semigroup<A> {
   append: (x: A, y: A) => A;
 }
-
-export const appendMaker = <A>(S: Semigroup<A>): ((x: A, y: A) => A) =>
-  S.append;
 
 export const getArraySemigroup = <A>(): Semigroup<Array<A>> => {
   return {
@@ -20,14 +14,12 @@ export const getObjectSemigroup = <O extends Object>(): Semigroup<O> => {
   return { append: (x, y) => Object.assign({}, x, y) };
 };
 
-export const semigroupData: Semigroup<Data> = {
-  append: (x: Data, y: Data) => {
-    if (Array.isArray(x) && Array.isArray(y)) {
-      return getArraySemigroup().append(x, y);
-    }
+const selectors = { append: <A>(x: Semigroup<A>, _: Semigroup<A>) => x };
 
-    return getObjectSemigroup().append(x, y);
-  }
-};
+const Semigroup = new Typeclass<Semigroup<{}>>(selectors);
 
-export const append = appendMaker(semigroupData);
+Semigroup.instance(Array, getArraySemigroup());
+Semigroup.instance(Object, getObjectSemigroup());
+Semigroup.instance(String, { append: (x: string, y: string) => x.concat(y) });
+
+export const append = Semigroup.getImplementation("append");
