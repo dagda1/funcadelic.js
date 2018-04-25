@@ -1,4 +1,4 @@
-export interface HKT<L, R> {
-  readonly _LeftElement: L;
-  readonly _RightElement: R;
+export interface HKT<F, A> {
+  readonly _HKT: F;
+  readonly _A: A;
 }

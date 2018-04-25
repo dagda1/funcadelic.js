@@ -1,74 +1,60 @@
-import { Monoid } from "../Monoid";
-import { Data, HKT } from "../types";
-import { append } from "../semigroup";
+import { Typeclass } from "../typeclass/index";
 
-export const LeftElement = "Array";
-
-export type LeftElement = typeof LeftElement;
-
-declare global {
-  interface Array<T> {
-    _LeftElement: LeftElement;
-    _RightElement: T;
-  }
-}
-
-const reduce = <A, B>(fa: Array<A>, b: B, f: (b: B, a: A) => B): B => {
-  const l = fa.length;
-  let r = b;
-  for (let i = 0; i < l; i++) {
-    r = f(r, fa[i]);
-  }
-  return r;
-};
+type Fold<F> = <A, B>(fn: (b: B, a: A) => A, initial: A, foldable: F) => B;
 
 export interface Foldable<F> {
-  readonly LeftElement: F;
-  reduce: <A, B>(fa: HKT<F, A>, b: B, f: (b: B, a: A) => B) => B;
+  foldl: Fold<F>;
+  foldr: Fold<F>;
 }
 
-export const foldlMaker = <F, M>(
-  F: Foldable<F>,
-  M: Monoid<M>
-): (<A>(fa: HKT<F, A>, f: (a: A) => M) => M) => {
-  return (fa, f) => {
-    return F.reduce(fa, M.empty, (acc, x) => {
-      return M.append(acc, f(x));
-    });
+export const getArrayFold = (): Foldable<Array<any>> => {
+  return {
+    foldl(fn, initial, array) {
+      return array.reduce(fn, initial);
+    },
+    foldr(fn, initial, array) {
+      return array.reduceRight(fn, initial);
+    }
   };
 };
 
-const monoid: Monoid<any> = {
-  append,
-  //neutral element
-  empty: () => [] //what do we do here?
+export const getObjectFold = (): Foldable<Object> => {
+  return {
+    foldr<Object>(fn, initial: Object, object) {
+      return Object.keys(object).reduceRight(
+        (memo: Object, key) =>
+          fn(memo, {
+            key,
+            get value() {
+              return object[key];
+            }
+          }),
+        initial
+      );
+    },
+    foldl<Object>(fn, initial: Object, object) {
+      return Object.keys(object).reduce(
+        (memo, key) =>
+          fn(memo, {
+            key,
+            get value() {
+              return object[key];
+            }
+          }),
+        initial
+      );
+    }
+  };
 };
 
-const Arr = {
-  LeftElement,
-  reduce
+const selectors = {
+  foldl: (_: any, __: any, foldable: any) => foldable,
+  foldr: (_: any, __: any, foldable: any) => foldable
 };
 
-export const foldl = foldlMaker(Arr, monoid);
+const Foldable = new Typeclass<Foldable<{}>>(selectors);
 
-/* import { type } from './typeclasses';
+Foldable.instance(Array, getArrayFold());
+Foldable.instance(Object, getObjectFold());
 
-export const Foldable = type(class Foldable {
-  foldr(fn, initial, foldable) {
-    let { foldr } = this(foldable);
-    return foldr(fn, initial, foldable);
-  }
-
-  foldl(fn, initial, foldable) {
-    let { foldl } = this(foldable);
-    return foldl(fn, initial, foldable);
-  }
-
-  size(foldable) {
-    let { foldr } = this(foldable);
-    return foldr((len) => len + 1, 0, foldable);
-  }
-});
-
-export const { foldr, foldl, size } = Foldable.prototype;
- */
+export const { foldl, foldr } = Foldable.getImplementations(["foldl", "foldr"]);
