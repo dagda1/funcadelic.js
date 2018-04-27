@@ -22,7 +22,7 @@ const getArrayFold = <A>(): Foldable<A[], A> => {
   };
 };
 
-export const getObjectFold = (): Foldable<Object, {}> => {
+export const getObjectFold = (): Foldable<Object, Object> => {
   return {
     foldr<Object>(fn, initial: Object, object) {
       return Object.keys(object).reduceRight(
@@ -56,7 +56,7 @@ const selectors = {
   foldr: (_: any, __: any, foldable: any) => foldable
 };
 
-const Foldable = new Typeclass<Foldable<{}>>(selectors);
+const Foldable = new Typeclass<Foldable<{}, any>>(selectors);
 
 Foldable.instance(Array, getArrayFold());
 Foldable.instance(Object, getObjectFold());

@@ -1,14 +1,13 @@
 import { Typeclass } from "../typeclass/index";
-import { HKT } from "../types";
 
-export interface Functor<F> {
-  map: <A, B>(fn: (a: A) => B, fa: HKT<F, A>) => HKT<F, B>;
+export interface Functor<FA extends Object, A, FB extends Object, B> {
+  map: (fn: (a: A) => B, fa: FA) => FB;
 }
 
-export const getArrayFunctor = (): Functor<Array<any>> => {
+export const getArrayFunctor = <A, B>(): Functor<A[], A, B[], B> => {
   return {
     map: (fn, fa) => {
-      return (fa as Array<any>).map(fn) as HKT<Array<B>>;
+      return fa.map(fn);
     }
   };
 };
