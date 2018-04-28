@@ -4,11 +4,18 @@ export const getType = (value: any): string =>
     .replace(/^\[object |\]$/g, "")
     .toLowerCase();
 
-export class Typeclass<T> {
-  selectors: object;
-  implementations: { type: Function; implementation: T }[] = [];
+export type Selectors<T> = { [P in keyof T]: any };
 
-  constructor(selectors) {
+export interface Implentation<T> {
+  type: Function;
+  implementation: T;
+}
+
+export class Typeclass<T> {
+  selectors: Selectors<T>;
+  implementations: Implentation<T>[] = [];
+
+  constructor(selectors: Selectors<T>) {
     this.selectors = selectors;
   }
 
@@ -32,11 +39,11 @@ export class Typeclass<T> {
       // if(lookup === "null") doSomething
       // we could handle nulls here or even use an Option type to stop unexpected errors
 
-      const impl = this.implementations.find(
+      const impl: T = this.implementations.find(
         imp => imp.type.name.toLowerCase() === lookup
       ).implementation;
 
-      return (impl[name] as any)(...args);
+      return impl[name](...args);
     }) as any) as T[K];
   }
 }

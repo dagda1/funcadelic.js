@@ -1,10 +1,8 @@
 import { Typeclass } from "../typeclass/index";
 
-type Fold<F, A> = <B>(
-  fn: (prev: B, curr: A) => B,
-  initial: B,
-  foldable: F
-) => B;
+type Foldfn<A, B> = (prev: B, curr: A) => B;
+
+type Fold<F, A> = <B>(fn: Foldfn<A, B>, initial: B, foldable: F) => B;
 
 export interface Foldable<F, A> {
   foldl: Fold<F, A>;
@@ -22,29 +20,29 @@ const getArrayFold = <A>(): Foldable<A[], A> => {
   };
 };
 
-export const getObjectFold = (): Foldable<Object, Object> => {
+export const getObjectFold = <F extends Object, A>(): Foldable<F, A> => {
   return {
-    foldr<Object>(fn, initial: Object, object) {
+    foldr<B>(fn: Foldfn<A, B>, initial: B, object: F) {
       return Object.keys(object).reduceRight(
-        (memo: Object, key) =>
-          fn(memo, {
+        (memo, key) =>
+          fn(memo, ({
             key,
             get value() {
               return object[key];
             }
-          }),
+          } as any) as A),
         initial
       );
     },
-    foldl<Object>(fn, initial: Object, object) {
+    foldl<B>(fn: Foldfn<A, B>, initial: B, object: F) {
       return Object.keys(object).reduce(
         (memo, key) =>
-          fn(memo, {
+          fn(memo, ({
             key,
             get value() {
               return object[key];
             }
-          }),
+          } as any) as A),
         initial
       );
     }
