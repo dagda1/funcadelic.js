@@ -18,11 +18,7 @@
     "prepare": "npm test",
     "start": "jest --watch"
   },
-  "files": [
-    "README.md",
-    "src",
-    "dist"
-  ],
+  "files": ["README.md", "src", "dist"],
   "dependencies": {
     "lodash.curry": "4.1.1",
     "object.getownpropertydescriptors": "2.0.3",
@@ -46,31 +42,18 @@
     "rollup": "0.57.1",
     "rollup-plugin-babel": "4.0.0-beta.3",
     "rollup-plugin-filesize": "1.5.0",
-    "rollup-plugin-typescript2": "github:ezolenko/rollup-plugin-typescript2#master",
+    "rollup-plugin-typescript2":
+      "github:ezolenko/rollup-plugin-typescript2#master",
     "ts-node": "^5.0.1",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.2"
   },
   "jest": {
-    "testMatch": [
-      "<rootDir>/src/**/?(*.)(spec|test).ts?(x)"
-    ],
+    "testMatch": ["<rootDir>/src/**/?(*.)(spec|test).ts?(x)"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "modulePaths": [
-      "<rootDir>/src",
-      "<rootDir>/node_modules"
-    ],
-    "watchPathIgnorePatterns": [
-      "<rootDir>/dist/"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "modulePaths": ["<rootDir>/src", "<rootDir>/node_modules"],
+    "watchPathIgnorePatterns": ["<rootDir>/dist/"],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }

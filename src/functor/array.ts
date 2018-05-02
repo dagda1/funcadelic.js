@@ -1,8 +1,9 @@
-import { Functor } from "./index";
+import { Functor } from ".";
+import { unknown } from "../types";
 
-export const getArrayFunctor = <A, B>(): Functor<A[], A, B[], B> => {
+export const getArrayFunctor = (): Functor<Array<unknown>> => {
   return {
-    map: (fn, fa) => {
+    map: <A, B>(fn: (a: A) => B, fa: A[]): B[] => {
       return fa.map(fn);
     }
   };
