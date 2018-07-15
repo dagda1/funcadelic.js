@@ -6,8 +6,8 @@ function promise<A>(result: A): Promise<A> {
 }
 
 describe("functor", () => {
-  it("maps arrays", () => {
-    expect(map(i => i * 2, [1, 2, 3])).toEqual([2, 4, 6]);
+  it.only("maps arrays", () => {
+    expect(map((i: number) => i * 2, [1, 2, 3])).toEqual([2, 4, 6]);
   });
 
   it("maps objects", function() {
