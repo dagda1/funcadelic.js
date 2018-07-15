@@ -1,10 +1,11 @@
 import { Typeclass, Selectors } from "../typeclass/index";
+import { unknown } from "../types";
 
 export interface Semigroup<A> {
   append: (x: A, y: A) => A;
 }
 
-export const getArraySemigroup = <A>(): Semigroup<Array<A>> => {
+export const getArraySemigroup = <A = never>(): Semigroup<A[]> => {
   return {
     append: (x, y) => x.concat(y)
   };
@@ -18,7 +19,7 @@ const selectors: Selectors<Semigroup<{}>> = {
   append: <A>(x: Semigroup<A>, _: Semigroup<A>) => x
 };
 
-const Semigroup = new Typeclass<Semigroup<{}>>(selectors);
+const Semigroup = new Typeclass<Semigroup<unknown>>(selectors);
 
 Semigroup.instance(Array, getArraySemigroup());
 Semigroup.instance(Object, getObjectSemigroup());

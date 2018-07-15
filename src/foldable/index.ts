@@ -1,16 +1,19 @@
-import { Typeclass } from "../typeclass/index";
-import { getArrayFold } from "./array";
-import { getObjectFold } from "./object";
+/* import { Typeclass } from "../typeclass/index"; */
+/* import { getArrayFold } from "./array";
+import { getObjectFold } from "./object"; */
+import { HKT, URIS, Type } from "../types";
 
-export type Foldfn<A, B> = (prev: B, curr: A) => B;
-
-export type Fold<F, A> = <B>(fn: Foldfn<A, B>, initial: B, foldable: F) => B;
-
-export interface Foldable<F, A> {
-  foldl: Fold<F, A>;
-  foldr: Fold<F, A>;
+export interface Foldable<F> {
+  readonly URI: F
+  readonly reduce: <A, B>(fa: HKT<F, A>, b: B, f: (b: B, a: A) => B) => B
 }
 
+export interface Foldable1<F extends URIS> {
+  readonly URI: F
+  readonly reduce: <A, B>(fa: Type<F, A>, b: B, f: (b: B, a: A) => B) => B
+}
+
+/* 
 const selectors = {
   foldl: (_: any, __: any, foldable: any) => foldable,
   foldr: (_: any, __: any, foldable: any) => foldable
@@ -21,4 +24,4 @@ const Foldable = new Typeclass<Foldable<{}, any>>(selectors);
 Foldable.instance(Array, getArrayFold());
 Foldable.instance(Object, getObjectFold());
 
-export const { foldl, foldr } = Foldable.getImplementations(["foldl", "foldr"]);
+export const { foldl, foldr } = Foldable.getImplementations(["foldl", "foldr"]); */

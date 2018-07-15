@@ -4,7 +4,7 @@ export const getType = (value: any): string =>
     .replace(/^\[object |\]$/g, "")
     .toLowerCase();
 
-export type Selectors<T> = { [P in keyof T]: any };
+export type Selectors<T> = { [P in keyof T]: T[P] };
 
 export interface Implentation<T> {
   type: Function;

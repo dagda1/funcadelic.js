@@ -12,6 +12,7 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "skipLibCheck": true,
+    "strictNullChecks": true,
     "rootDirs": ["./src", "./tests"],
     "typeRoots": ["./node_modules/@types"],
     "lib": ["es5", "es2015", "es2016", "dom"],
